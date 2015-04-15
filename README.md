@@ -1,16 +1,16 @@
 # Somerset
 
-Simple scientific pipelines
+Simple scientific pipelines.
 
-    * stages can be written using any tool or language
-    * output files are made read-only when stages complete
-    * stages cannot be accidentally run again
-    * `stdout` and `stderr` are both printed to the console and written to a log file
-    * log files will contain
-        * local datetimes that the staged started and completed
-        * version number of the binary used to run the stage
-        * host name
-        * OS name
+* stages can be written using any tool or language
+* output files are made read-only when stages complete
+* stages cannot be accidentally run again
+* `stdout` and `stderr` are both printed to the console and written to a log file
+* log files will contain
+    * local datetimes that the staged started and completed
+    * version number of the binary used to run the stage
+    * host name
+    * OS name
 
 ## Installation
 
@@ -47,7 +47,7 @@ cd somerset
 ## Define stages
 
 Create `stages.py` that tells somerset about each of the stages in your pipeline.
-For example, stage 1 might be a python script run and stage 2 an R script:
+For example, stage 1 might be a Python 2 script run and stage 2 an R script:
 
     python = '/home/lawh/Envs/dig279/bin/python'
     R = '/home/lawh/local/R-3.1.3/bin/Rscript'
