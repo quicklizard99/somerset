@@ -26,7 +26,7 @@ pip install <file you downloaded>
 or
 
 ```
-pip install https://github.com/NaturalHistoryMuseum/somerset/archive/v0.1.1.zip
+pip install https://github.com/quicklizard99/somerset/archive/v0.1.1.zip
 ```
 
 * To install the current source
@@ -39,7 +39,7 @@ pip install git+https://github.com/quicklizard99/somerset@master
 * To clone this repo
 
 ```
-git clone https://github.com/NaturalHistoryMuseum/somerset.git
+git clone https://github.com/quicklizard99/somerset.git
 cd somerset
 ./setup.py install
 ```
