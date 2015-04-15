@@ -47,7 +47,7 @@ cd somerset
 ## Define stages
 
 Create `stages.py` that tells somerset about each of the stages in your pipeline.
-For example, stage 1 might be a Python 2 script run and stage 2 an R script:
+For example, stage 1 might be a Python 2 script, and stage 2 an R script:
 
     python = '/home/lawh/Envs/dig279/bin/python'
     R = '/home/lawh/local/R-3.1.3/bin/Rscript'
