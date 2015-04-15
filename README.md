@@ -14,27 +14,35 @@ Simple scientific pipelines
 
 ## Installation
 
-Install the current release of Python 3
+Install the current release of Python 3, run `pip install --upgrade pip` and
+then do one of the following
 
-    pip install --upgrade pip
+* To install a release
 
-* Install a release
-
-    pip install <file you downloaded>
+```
+pip install <file you downloaded>
+```
 
 or
 
-    pip install https://github.com/NaturalHistoryMuseum/somerset/archive/v0.1.1.zip
+```
+pip install https://github.com/NaturalHistoryMuseum/somerset/archive/v0.1.1.zip
+```
 
-* Install the current source
+* To install the current source
 
-    pip install git+https://github.com/quicklizard99/somerset@master
 
-* Clone this repo
+```
+pip install git+https://github.com/quicklizard99/somerset@master
+```
 
-    git clone https://github.com/NaturalHistoryMuseum/somerset.git
-    cd somerset
-    ./setup.py install
+* To clone this repo
+
+```
+git clone https://github.com/NaturalHistoryMuseum/somerset.git
+cd somerset
+./setup.py install
+```
 
 ## Define stages
 
