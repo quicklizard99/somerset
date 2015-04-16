@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 import argparse
 import os
@@ -74,7 +74,7 @@ class Stage(object):
 
     def _finished(self):
         "Makes output files read only"
-        for p in self.output_dir.glob('**/*'):
+        for p in (p for p in self.output_dir.rglob('*') if p.is_file()):
             mode = stat.S_IMODE(p.stat().st_mode)
             p.chmod(mode & ~(stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH))
 
