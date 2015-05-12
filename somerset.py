@@ -131,9 +131,9 @@ def remove_all_output():
         print('Removing all output directories')
         for s in STAGES.keys():
             output_dir = Stage(s).output_dir
-            if os.path.isdir(output_dir):
+            if output_dir.is_dir():
                 print('Removing [{0}]'.format(output_dir))
-                shutil.rmtree(output_dir)
+                shutil.rmtree(str(output_dir))
         print('All output directories removed')
 
 
