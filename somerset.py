@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
-__version__ = '0.1.1'
+__version__ = '0.1.3'
 
 import argparse
 import os
@@ -150,20 +150,25 @@ def main():
     parser.add_argument("stage", help='The stages to run', nargs='*')
     parser.add_argument('-v', '--version', action='version',
                         version='%(prog)s ' + __version__)
-    #group = parser.add_mutually_exclusive_group(required=True)
     parser.add_argument("-l", '--list-stages', action='store_true',
                         help='List all stages')
-    parser.add_argument('-r', '--remove-all-output', action='store_true',
+
+    group_r = parser.add_mutually_exclusive_group()
+    group_r.add_argument('-r', '--remove-all-output', action='store_true',
                         help='Remove all stage output directories')
+    group_r.add_argument('-R', '--REMOVE-ALL-OUTPUT', action='store_true',
+                        help='Same as -r but does not prompt before removing')
     args = parser.parse_args()
 
     if args.list_stages:
         for key, command_line in STAGES.items():
             print(key, command_line)
         print('all')
-    elif args.remove_all_output:
-        res = input('Are you sure you want to remove all output directories (y/N)?')
-        if 'y'==res.lower():
+    elif args.remove_all_output or args.REMOVE_ALL_OUTPUT:
+        if args.remove_all_output:
+            res = input('Are you sure you want to remove all output directories '
+                        '(y/N)?')
+        if args.REMOVE_ALL_OUTPUT or 'y'==res.lower():
             remove_all_output()
         else:
             print('No action taken')
