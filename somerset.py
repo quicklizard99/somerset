@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 
 import argparse
 import os
@@ -138,6 +138,7 @@ def remove_all_output():
 
 
 def main():
+    sys.path.append(os.getcwd())    # For Windows
     try:
         import stages
     except ImportError as e:
