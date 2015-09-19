@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
-__version__ = '0.1.5'
+__version__ = '0.1.6'
 
 import argparse
 import errno
@@ -170,7 +170,8 @@ def main():
         STAGES = OrderedDict((stage, args) for stage, *args in stages.STAGES)
 
     parser = argparse.ArgumentParser(description='Simple scientific pipelines')
-    parser.add_argument("stage", help='The stages to run', nargs='*')
+    parser.add_argument("stage", help='The stages to run. Can names of stages'
+        'or a single range e.g., 1-3', nargs='*')
     parser.add_argument('-v', '--version', action='version',
                         version='%(prog)s ' + __version__)
     parser.add_argument("-l", '--list-stages', action='store_true',
@@ -195,10 +196,25 @@ def main():
             remove_all_output()
         else:
             print('No action taken')
-    elif 1 == len(args.stage) and 'all'==args.stage[0].lower():
+    elif 1 == len(args.stage) and 'all' == args.stage[0].lower():
         run_all()
     elif args.stage:
-        for stage in args.stage:
+        stages = None
+
+        if (1 == len(args.stage) and '-' in args.stage[0] and
+            args.stage[0] not in STAGES):
+            # A range should be two stages seperated by a hyphen
+            lower, upper, *junk = args.stage[0].split('-')
+            if lower in STAGES and upper in STAGES and not junk:
+                keys = list(STAGES.keys())
+                stages = keys[keys.index(lower):(1 + keys.index(upper))]
+
+        if not stages:
+            # A range was not given - expect one or more stages seperated by
+            # spaces
+            stages = args.stage
+
+        for stage in stages:
             Stage(stage).run()
     else:
         parser.print_help()
