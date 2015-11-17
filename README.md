@@ -26,7 +26,7 @@ pip install <file you downloaded>
 or
 
 ```
-pip install https://github.com/quicklizard99/somerset/archive/v0.1.5.zip
+pip install https://github.com/quicklizard99/somerset/archive/v0.1.6.zip
 ```
 
 * To install the current source
@@ -80,6 +80,7 @@ define the locations of the binaries:
 The following all have effect of running both stages in the pipeline
 
     somerset.py 1 2
+    somerset.py 1-2
     somerset.py all
     somerset.py 1 && somerset.py 2
 
@@ -90,7 +91,7 @@ should write all its output to the directory `1_analyse`.
 
 Once complete, your directory will look like:
 
-    0_data
+    0_data/data files that are the inputs to the pipeline
     1_analyse/log.txt
     1_analyse/whatever files stage 1 created
     1_analyse.py
@@ -116,10 +117,12 @@ a stage results in an error message:
     __main__.StageError: Output directory [1_analyse] already exists. Has this stage already been run?
 
 Remove a stage's output directory to run it again. Want to start from scratch?
-The following both have the same effect
+Each of the following lines removes all of the output directories:
 
     rm -rf 1_analyse 2_results
-    somerset.py --remove-all-output
+    somerset.py --remove-all-output    # Prompts for confirmation
+    somerset.py -r                     # Prompts for confirmation
+    somerset.py -R                     # Does not prompt
 
 ## What stages do I have?
 
