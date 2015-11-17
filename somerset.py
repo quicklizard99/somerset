@@ -170,8 +170,8 @@ def main():
         STAGES = OrderedDict((stage, args) for stage, *args in stages.STAGES)
 
     parser = argparse.ArgumentParser(description='Simple scientific pipelines')
-    parser.add_argument("stage", help='The stages to run. Can names of stages'
-        'or a single range e.g., 1-3', nargs='*')
+    parser.add_argument("stage", help='The stages to run. Can be names of stages'
+        'or a range e.g., 1-3', nargs='*')
     parser.add_argument('-v', '--version', action='version',
                         version='%(prog)s ' + __version__)
     parser.add_argument("-l", '--list-stages', action='store_true',
