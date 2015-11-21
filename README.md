@@ -26,7 +26,7 @@ pip install <file you downloaded>
 or
 
 ```
-pip install https://github.com/quicklizard99/somerset/archive/v0.1.6.zip
+pip install https://github.com/quicklizard99/somerset/archive/v0.1.7.zip
 ```
 
 * To install the current source

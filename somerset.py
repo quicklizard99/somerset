@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
-__version__ = '0.1.6'
+__version__ = '0.1.7'
 
 import argparse
 import errno
@@ -90,7 +90,7 @@ class Stage(object):
             if not line and exitcode is not None:
                 break
             elif line:
-                print(line.decode())
+                print(line.decode(errors='replace'))
 
         if exitcode:
             sys.exit(exitcode)
