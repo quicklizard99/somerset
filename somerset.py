@@ -81,7 +81,7 @@ class Stage(object):
 
     def _cmd(self, args):
         "Runs args and waits for it to finish, printing stdout"
-        s = subprocess.Popen(args, stdout=subprocess.PIPE, 
+        s = subprocess.Popen(args, stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT)
         while True:
             line = s.stdout.readline()
@@ -98,7 +98,7 @@ class Stage(object):
     def run(self):
         "Runs this stage"
         with self._prime():
-            print('Stage [{0}] started at [{1}]'.format(self.stage, 
+            print('Stage [{0}] started at [{1}]'.format(self.stage,
                                                         self._time_string()))
             print('Running somerset [{0}] in Python [{1}] on [{2}] [{3}]'.format(
                         __version__, sys.version, platform.node(), platform.platform()))
