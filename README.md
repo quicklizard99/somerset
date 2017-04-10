@@ -2,12 +2,27 @@
 
 Simple scientific pipelines.
 
-* stages can be written using any tool or language
-* output files are made read-only when stages complete
+I wrote Somerset because I wanted to
+
+* break my analyses into discrete stages
+* be able to run each stage independently that can be run independently
+* have the pipeline execution halt if a stage fails
+* prevent myself from accidentally overwritting or deleting outputs
+* record all output to a single logfile
+* record the date, time and name of the computer on which the stage was run
+* record the version of R, Python or whatever else I used for that stage
+
+Somerset is a small Python script
+* stages can be written using any tool or language - Python, R, Java, bash
+* each stage gets it's own script file
 * stages cannot be accidentally run again
-* `stdout` and `stderr` are both printed to the console and written to a log file
-* log files will contain
-    * local datetimes that the staged started and completed
+* each stage's output files are written to a single directory and are made
+  read-only when stages complete
+* `stdout` and `stderr` are printed to the console and written to a log file
+* a logfile is written per stage, containing
+
+    * the version number of the tool used to execute the stage are recorded a log file
+    * the local date and time on which the staged started and completed
     * version number of the binary used to run the stage
     * host name
     * OS name
@@ -20,71 +35,75 @@ then do one of the following
 * To install a release
 
 ```
-pip install <file you downloaded>
-```
-
-or
-
-```
 pip install https://github.com/quicklizard99/somerset/archive/v0.1.7.zip
 ```
+
+or if you downloaded a release file
+
+    pip install <file you downloaded>
 
 * To install the current source
 
 
-```
-pip install git+https://github.com/quicklizard99/somerset@master
-```
-
-* To clone this repo
-
-```
-git clone https://github.com/quicklizard99/somerset.git
-cd somerset
-./setup.py install
-```
+    pip install git+https://github.com/quicklizard99/somerset@master
 
 ## Define stages
 
 Create `stages.py` that tells somerset about each of the stages in your pipeline.
-For example, stage 1 might be a Python 2 script, and stage 2 an R script:
+For example, stage 1 might be a Python script, and stage 2 an R script:
 
-    python = '/home/lawh/Envs/dig279/bin/python'
-    R = '/home/lawh/local/R-3.1.3/bin/Rscript'
+```python
+python = '/home/lawh/Envs/dig279/bin/python'
+R = '/home/lawh/local/R-3.1.3/bin/Rscript'
 
-    STAGES = [ ('1', python, '-u', '1_analyse.py'),
-               ('2', R,            '2_results.R'),
-             ]
+STAGES = [ ('1', python, '-u', '1_analyse.py'),
+           ('2', R,            '2_results.R'),
+         ]
+```
+
+The `'-u'` flag makes Python write unbuffered output, so you will see output
+as soon as it is printed rather than when Python flushes its output buffers.
+
+You might want to use different versions of a tool for different stages, for
+example Python 3 for most bits and Python 2 that ships with ArcGIS for a GIS
+analysis
+
+```python
+STAGES = [ ('1', 'C:/Python35/python.exe', '-u', '1_preprocess.py'),
+           ('2', 'C:/Python27/ArcGIS10.1/python.exe,', '-u', '2_grid_cells.py'),
+         ]
+```
 
 If the same pipeline will be run on different machines, you might want to
 define the locations of the binaries:
 
-    import socket
+```python
+import socket
 
-    if 'LSCI-H922H32' == socket.gethostname():
-        # My Linux desktop
-        python = '/home/lawh/Envs/dig279/bin/python'
-        R = '/home/lawh/local/R-3.1.3/bin/Rscript'
-    else:
-        # Assume my MacBook Air
-        python = '/Users/lawh/Envs/barcode_report/bin/python'
-        R = '/usr/bin/Rscript'
+if 'LSCI-H922H32' == socket.gethostname():
+    # My Linux desktop
+    python = '/home/lawh/Envs/dig279/bin/python'
+    R = '/home/lawh/local/R-3.1.3/bin/Rscript'
+else:
+    # Assume my MacBook Air
+    python = '/Users/lawh/Envs/barcode_report/bin/python'
+    R = '/usr/bin/Rscript'
 
-    STAGES = [ ('1', python, '-u', '1_analyse.py'),
-               ('2', R,            '2_results.R'),
-             ]
-
+STAGES = [ ('1', python, '-u', '1_analyse.py'),
+           ('2', R,            '2_results.R'),
+         ]
+```
 
 ## Run stages
 
-The following all have effect of running both stages in the pipeline
+The following all have effect of running both stages in the above pipeline
 
     somerset.py 1 2
     somerset.py 1-2
     somerset.py all
     somerset.py 1 && somerset.py 2
 
-For each of the above forms, if stage 1 fails, stage 2 wil not be run.
+For each of the above forms, if stage 1 fails, stage 2 will not be run.
 `somerset` creates an output directory for each stage, named by removing the
 suffix of the stage filename. For the `stages.py` given above, `1_analyse.py`
 should write all its output to the directory `1_analyse`.
@@ -116,13 +135,19 @@ a stage results in an error message:
       File "/Users/lawh/Envs/work/lib/python3.4/site-packages/somerset-0.1.0-py3.4.egg/EGG-INFO/scripts/somerset.py", line 67, in _prime
     __main__.StageError: Output directory [1_analyse] already exists. Has this stage already been run?
 
+## Clearing output
+
 Remove a stage's output directory to run it again. Want to start from scratch?
 Each of the following lines removes all of the output directories:
 
-    rm -rf 1_analyse 2_results
     somerset.py --remove-all-output    # Prompts for confirmation
     somerset.py -r                     # Prompts for confirmation
     somerset.py -R                     # Does not prompt
+
+The last of these is equivalent to running
+
+    rm -rf 1_analyse 2_results
+    rmdir /Q /S 1_analyse 2_results    # Same as the above when on Windows
 
 ## What stages do I have?
 
