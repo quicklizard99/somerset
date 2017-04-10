@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
-__version__ = '0.1.7'
+__version__ = '0.1.8'
 
 import argparse
 import errno
